@@ -1,0 +1,26 @@
+{
+  "name": "ponder",
+  "version": "1.0.0",
+  "description": "Optimize Edh Decks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "opt": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ponder"
+  },
+  "keywords": [
+    "mtg",
+    "edh",
+    "commander"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "javascript-lp-solver": "^0.4.24",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  }
+}
