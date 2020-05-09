@@ -19,13 +19,15 @@ The cards are input as a CSV, with names in the first column, categories for the
 | Cultivate     | 0         | 3     | 0      |
 | Lightning Bolt| 0         | 0     | 3      |
 
-Here, our constraints are the 'Card Draw'
+Here, our constraints are the 'Card Draw', 'Ramp' and 'Damage'.
 
 After 'Solving' the constrains and cards, the program outputs three different pieces of information.
 
 ## Vertices
 
-Vertices are the solutions to individual constraints, any cards with a score of 0 are not included in the proposed decks.
+Vertices are the solutions to individual constraints, which can act as proposed decks. 
+
+Any cards with a score of 0 are not included in the proposed decks.
 
 ## Midpoint
 
