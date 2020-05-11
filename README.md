@@ -1,9 +1,7 @@
 # ponder
 
-> Don't Use a Cannon to Kill a Fly 
-> - Confucius
-
-But Confucius never tried to make a Magic the Gathering deck.
+> “This sort of innovation occurs when you set out to improve an electric tea kettle and misplace a decimal.” 
+> - Cosmotronic Wave
 
 Ponder uses a Linear Programming techniques to take a large set of cards (more than the deck size), a bunch of constraints, and find the optimal* combination of cards. 
 
