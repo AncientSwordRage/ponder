@@ -2,8 +2,27 @@ const solver = require("./node_modules/javascript-lp-solver");
 const CSVToJSON = require("./csvToJson");
 const fs = require("fs");
 
+const { getDeckSizeConstraints, getCardFormatConstraints } = require("./constraints");
+const { getInts, getOptimize, getVariables } = require("./entries");
+
+const deckSize = 100;
 const landCount = 40;
 const maxCardCount = 1;
+
+/**
+ * Create the variables as entries (list of tuples)
+ * [
+ *  [name, {data}],
+ *  [name, {data}],
+ * ]
+ */
+const getVariablesEntries = jsonData => jsonData.reduce((memo, curr, index) => {
+    const { "Card Name": name, ...data } = curr;
+    if (name) {
+        memo.push([name, data]);
+    }
+    return memo;
+}, []);
 
 const tacticConstraints = [
     ['Ramp', { min: 10 }],
@@ -13,36 +32,17 @@ const tacticConstraints = [
     // ['instants Synergy', { min: 5 }],
     // ['Return things to hand', { min: 15 }],
 ];
-const deckSizeContraints = ['cards', { equal: 100 - landCount }]
+const deckSizeContraints = getDeckSizeConstraints(deckSize, landCount);
 
 // Read in the sample data (card list with tactics)
 var data = fs.readFileSync('sample_data.csv')
     .toString().trim();
-/**
- * Create the variables as entries (list of tuples)
- * [
- *  [name, {data}],
- *  [name, {data}],
- * ]
- */
-const variablesEntries = CSVToJSON(data).reduce((memo, curr, index) => {
-    const { "Card Name": name, ...data } = curr;
-    if (name) {
-        memo.push([name, data]);
-    }
-    return memo;
-}, [])
 
-/**
- * Create the base constraints on the cards, i.e. singleton or otherwise
- * [
- *  [cardName, { max: 1 }],
- *  [cardName, { max: 1 }]
- * ]
- * 
- */
-const cardFormatConstraints = variablesEntries.filter(([cardName,]) => Boolean(cardName))
-    .map(([cardName,]) => [cardName, { max: maxCardCount }]);
+const jsonData = CSVToJSON(data);
+
+const variablesEntries = getVariablesEntries(jsonData);
+
+const cardFormatConstraints = getCardFormatConstraints(variablesEntries, maxCardCount);
 
 //Make contraints from the all our entries, 
 const constraints = Object.fromEntries([
@@ -51,15 +51,12 @@ const constraints = Object.fromEntries([
     deckSizeContraints
 ]);
 
-// Specify that the cards must be an integer (TODO, see if binaries works)
-const ints = Object.fromEntries(variablesEntries.map(([cardName,]) => [cardName, 1]));
 
-//Use the variables entries, to get the categories. Specify we need to optimize them TO THE MAX
-const optimizeEntries = Object.keys(variablesEntries[0][1]).map(categories => [categories, 'max'])
-const optimize = Object.fromEntries(optimizeEntries);
+const ints = getInts(variablesEntries);
+const optimize = getOptimize(variablesEntries);
 
 /**
- * Create the variables object, form entries. 
+ * Create the variables object, from entries. 
  * 
  * Each Card also gets a category for it's name (so we can enforce card number lmitis),
  * As well as this, we give each card a 'cards' category (so we can enforce deck size)
@@ -73,10 +70,7 @@ const optimize = Object.fromEntries(optimizeEntries);
  *  }]
  * ]
  */
-const variables = Object.fromEntries(variablesEntries.map(([cardName, data]) =>
-    [cardName, { ...data, [cardName]: 1, cards: 1 }])
-);
-
+const variables = getVariables(variablesEntries)
 
 // Combine all the objects, into our model
 const model = {
@@ -86,12 +80,12 @@ const model = {
     ints,
     options: {
         // these options allow the procees to finish
-        tolerance: 0.001,
+        tolerance: 0.1,
         timeout: 100000
     }
 };
 
-// Let the library the model
+// Let the library solve the model
 results = solver.Solve(model);
 
 // Vertices are the solutions to individual constraints
@@ -106,18 +100,19 @@ const filteredVerts = results.vertices.map(vertex =>
     )
 );
 
-console.log(filteredVerts);
+// console.log(filteredVerts);
 
 // Midpoint is the arithmetic mean of all individual solutions
-console.log(results.midpoint);
+// console.log(results.midpoint);
 
 // Ranges show minium and maximum values
 // across all of th vertices
 // good as a diagnostic for which solutions
 // don't include tactics, which can be fed back in
 // to the tacticConstraints
-console.log(Object.fromEntries(
-    Object.entries(results.ranges)
-        .filter(([name, score]) => score.min >= 0)
-)
-)
+// console.log(Object.fromEntries(
+//     Object.entries(results.ranges)
+//         .filter(([name, score]) => score.min >= 0)
+//     )
+// )
+
