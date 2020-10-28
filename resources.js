@@ -5,14 +5,14 @@ const Path = require('path');
 const axios = require('axios');
 const { handleWriter } = require('./resource.util');
 
-const URL = 'https://unsplash.com/photos/AaEQmoufHLk/download?force=true'
+const url = 'https://mtgjson.com/api/v5/AllPrintings.json.zip'
 
-async function downloadMtgJson() {
-    const path = Path.resolve(__dirname, 'resources', 'code.jpg')
+async function downloadMtgJsonZip() {
+    const path = Path.resolve(__dirname, 'resources', 'AllPrintings.json')
     const writer = Fs.createWriteStream(path)
 
     const response = await axios({
-        URL,
+        url,
         method: 'GET',
         responseType: 'stream'
     })
@@ -21,6 +21,6 @@ async function downloadMtgJson() {
 }
 
 module.exports = {
-    downloadMtgJson,
-    URL
+    downloadMtgJsonZip,
+    URL: url
 }

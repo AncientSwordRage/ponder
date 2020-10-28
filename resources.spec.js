@@ -2,7 +2,7 @@ const axios = require('axios');
 const fs = require('fs');
 const { handleWriter } = require('./resource.util');
 
-const { downloadMtgJson, URL } = require('./resources');
+const { downloadMtgJson, url } = require('./resources');
 
 jest.mock('fs');
 jest.mock('axios');
@@ -18,20 +18,10 @@ describe.only('fetchData', () => {
         const expectedJson = await downloadMtgJson();
         expect(expectedJson).toEqual('data');
         expect(axios).toHaveBeenCalledWith(
-            expect.objectContaining({ URL: 'https://unsplash.com/photos/AaEQmoufHLk/download?force=true' }),
+            expect.objectContaining({ url: 'https://mtgjson.com/api/v5/AllPrintings.json' }),
         );
         expect(axios).toHaveBeenCalledWith(
             expect.objectContaining({ responseType: 'stream' }),
         );
     });
-
-    // it('fetches erroneously data from an URL', async () => {
-    //     const errorMessage = 'Network Error';
-
-    //     axios.mockImplementationOnce(() =>
-    //         Promise.reject(new Error(errorMessage)),
-    //     );
-
-    //     await expect(downloadMtgJson()).rejects.toThrow(errorMessage);
-    // });
 });
