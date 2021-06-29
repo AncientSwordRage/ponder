@@ -2,7 +2,7 @@ const axios = require('axios');
 const fs = require('fs');
 const { handleWriter } = require('./resource.util');
 
-const { downloadMtgJson, url } = require('./resources');
+const { downloadMtgJsonZip, url } = require('./resources');
 
 jest.mock('fs');
 jest.mock('axios');
@@ -15,10 +15,10 @@ describe.only('fetchData', () => {
         axios.mockImplementationOnce(() => data);
         fs.createWriteStream.mockImplementationOnce(() => 'fs');
         handleWriter.mockImplementationOnce(() => 'data');
-        const expectedJson = await downloadMtgJson();
+        const expectedJson = await downloadMtgJsonZip();
         expect(expectedJson).toEqual('data');
         expect(axios).toHaveBeenCalledWith(
-            expect.objectContaining({ url: 'https://mtgjson.com/api/v5/AllPrintings.json' }),
+            expect.objectContaining({ url: 'https://mtgjson.com/api/v5/AllPrintings.json.zip' }),
         );
         expect(axios).toHaveBeenCalledWith(
             expect.objectContaining({ responseType: 'stream' }),
