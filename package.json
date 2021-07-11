@@ -21,6 +21,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "javascript-lp-solver": "^0.4.24",
+    "progress": "^2.0.3",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"
   },
