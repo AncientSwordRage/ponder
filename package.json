@@ -20,7 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "javascript-lp-solver": "^0.4.24",
     "progress": "^2.0.3",
     "webpack": "^4.43.0",
