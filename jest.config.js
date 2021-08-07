@@ -1,6 +1,4 @@
-'use strict';
-
 module.exports = {
-    testEnvironment: 'node',
-    maxWorkers: 4
-}
+  testEnvironment: 'node',
+  maxWorkers: 4,
+};
