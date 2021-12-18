@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 const fs = require('fs');
 const solver = require('./node_modules/javascript-lp-solver');
-const CSVToJSON = require('./csvToJson');
+const CSVToJSON = require('./resources/csvToJson');
 
 const { getDeckSizeConstraints, getCardFormatConstraints } = require('./constraints');
 const { getInts, getOptimize, getVariables } = require('./entries');
-const { downloadMtgJsonZip } = require('./resources');
+const { downloadMtgJsonZip, unzipJson, getMtgJsonVersion } = require('./resources/resources');
 
 const deckSize = 100;
 const landCount = 40;
@@ -112,5 +112,7 @@ const filteredVerts = results.vertices.map((vertex) => Object.fromEntries(
 //         .filter(([name, score]) => score.min >= 0)
 //     )
 // )
-
-downloadMtgJsonZip();
+getMtgJsonVersion().then(
+  (version) => console.info(version),
+  (...args) => console.error(...args));
+// downloadMtgJsonZip().then(() => unzipJson());
