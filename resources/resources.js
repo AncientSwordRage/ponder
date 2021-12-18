@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 const Fs = require('fs');
-const axios = require('axios');
+const { default: axios } = require('axios');
 const { chain } = require('stream-chain');
 
 const zlib = require('zlib');
@@ -19,11 +19,11 @@ const {
  */
 async function getMtgJsonVersion() {
   try {
-    // @ts-ignore
-    const { data } = await axios(metaUrl);
-    return data.date;
+    const response = await axios(metaUrl);
+    const { data: { meta: { version } } } = response;
+    return version;
   } catch (error) {
-    console.error('Could not fetch MTG JSON metadata');
+    console.error(`Could not fetch MTG JSON metadata: ${error}`);
     throw error;
   }
 }
@@ -53,7 +53,6 @@ async function downloadMtgJsonZip() {
   const writer = Fs.createWriteStream(zipPath);
 
   console.info('...connecting...');
-  // @ts-ignore
   const { data, headers } = await axios({
     url,
     method: 'GET',

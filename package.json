@@ -4,7 +4,8 @@
   "description": "Optimize Edh Decks",
   "main": "index.js",
   "scripts": {
-    "lint": "node node_modules/eslint/bin/eslint.js '**/*.js'",
+    "lint": "node node_modules/eslint/bin/eslint.js --ignore-path .gitignore '**/*.js'",
+    "lint:fix": "npm run lint -- --fix",
     "test": "jest",
     "opt": "node index.js"
   },
