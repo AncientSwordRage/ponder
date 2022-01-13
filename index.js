@@ -5,7 +5,11 @@ const CSVToJSON = require('./resources/csvToJson');
 
 const { getDeckSizeConstraints, getCardFormatConstraints } = require('./constraints');
 const { getInts, getOptimize, getVariables } = require('./entries');
-const { downloadMtgJsonZip, unzipJson, getMtgJsonVersion } = require('./resources/resources');
+const {
+  downloadMtgJsonZip, unzipJson, getMtgJsonVersion, isLocalDataRecent,
+} = require('./resources/resources');
+const { getPathFor } = require('./resources/resources.util');
+const { fileName } = require('./resources/resources.constants');
 
 const deckSize = 100;
 const landCount = 40;
@@ -112,7 +116,29 @@ const filteredVerts = results.vertices.map((vertex) => Object.fromEntries(
 //         .filter(([name, score]) => score.min >= 0)
 //     )
 // )
-getMtgJsonVersion().then(
-  (version) => console.info(version),
-  (...args) => console.error(...args));
-// downloadMtgJsonZip().then(() => unzipJson());
+isLocalDataRecent(0).then(async (dataFresh) => {
+  console.log(dataFresh ? 'fresh' : 'stale');
+  if (!dataFresh) {
+    await downloadMtgJsonZip();
+    console.log('finished awaiting dowload mtg json zip');
+    await unzipJson();
+    console.log('finished awaiting unzip');
+    console.log('about to run stat meta');
+    const metaStat = fs.statSync(getPathFor(fileName, 'meta'));
+    console.log(metaStat.size, metaStat.ctime);
+    console.log('about to run stat data');
+    const dataStat = fs.statSync(getPathFor(fileName, 'data'));
+    console.log(dataStat.size, dataStat.ctime);
+    const freshNow = await isLocalDataRecent();
+    console.log(freshNow ? 'fresh' : 'stale');
+    return freshNow;
+  } return dataFresh;
+}, (error) => {
+  console.error('\ndid an error:\n');
+  console.error(error);
+}).catch(
+  (allError) => {
+    console.error('\nall other errors:\n');
+    console.error(allError);
+  },
+);
