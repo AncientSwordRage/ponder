@@ -23,7 +23,7 @@
   "dependencies": {
     "axios": "^0.21.2",
     "javascript-lp-solver": "^0.4.24",
-    "jszip": "^3.7.1",
+    "jszip": "^3.8.0",
     "progress": "^2.0.3",
     "stream-chain": "^2.2.4",
     "stream-fork": "^1.0.5",
