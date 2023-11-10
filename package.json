@@ -21,7 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.2",
+    "axios": "^1.6.0",
     "javascript-lp-solver": "^0.4.24",
     "jszip": "^3.8.0",
     "progress": "^2.0.3",
