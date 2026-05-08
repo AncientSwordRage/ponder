@@ -28,7 +28,7 @@
     "stream-chain": "^2.2.4",
     "stream-fork": "^1.0.5",
     "stream-json": "^1.7.2",
-    "unzip-stream": "^0.3.1",
+    "unzip-stream": "^0.3.2",
     "webpack": "^5.76.0",
     "webpack-cli": "^5.0.1"
   },
