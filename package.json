@@ -27,7 +27,7 @@
     "progress": "^2.0.3",
     "stream-chain": "^2.2.4",
     "stream-fork": "^1.0.5",
-    "stream-json": "^1.7.2",
+    "stream-json": "^3.5.0",
     "unzip-stream": "^0.3.2",
     "webpack": "^5.76.0",
     "webpack-cli": "^5.0.1"
